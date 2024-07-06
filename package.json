@@ -9,6 +9,10 @@
     "url": "https://arafat.dev"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arafathusayn/use-detector.git"
+  },
   "scripts": {
     "build": "tsup ./src"
   },
