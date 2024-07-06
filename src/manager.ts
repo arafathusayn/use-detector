@@ -6,6 +6,7 @@
 import type { Dispatch, MutableRefObject, SetStateAction } from "react"
 
 const f = requestAnimationFrame
+const c = cancelAnimationFrame
 
 /**
  * Manages observers, allowing registration, update, and unregistration.
@@ -33,6 +34,7 @@ class ObserverManager<T> {
         trigger((prev) => !prev)
       }
     }
+    if (this.animationId !== null) c(this.animationId)
     this.animationId = f(this.update)
   }
 
@@ -67,7 +69,7 @@ class ObserverManager<T> {
     this.observers.delete(key)
     this.idCounter--
     if (this.observers.size === 0 && this.animationId !== null) {
-      cancelAnimationFrame(this.animationId)
+      c(this.animationId)
       this.animationId = null
     }
   }
