@@ -1,6 +1,6 @@
-# The `useDetector` hook for React
+> The UI has a render loop. Let's use it in React.
 
-`useDetector` hook is designed to observe changes in a variable and trigger re-renders automatically when the variable changes.
+The `useValue` and the `useDetector` hooks allow multiple components to observe changes to a variable and trigger re-renders automatically whenever the variable changes. You can use it for "sharing state" between components without using React's Context API.
 
 ### Install 
 
