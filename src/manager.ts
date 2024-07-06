@@ -67,7 +67,6 @@ class ObserverManager<T> {
    */
   unregister(key: string) {
     this.observers.delete(key)
-    this.idCounter--
     if (this.observers.size === 0 && this.animationId !== null) {
       c(this.animationId)
       this.animationId = null
