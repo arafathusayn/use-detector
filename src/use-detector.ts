@@ -41,10 +41,12 @@ export function useDetector<T>(
  * Custom hook for observing changes to a value, triggering re-render upon change automatically.
  *
  * @template T The type of the value being observed.
- * @param {T} oldValue The initial value.
- * @param {GetNewValue<T>} getNewValue A function that returns the new value.
+ * @param {GetNewValue<T>} getValue A function that returns the new value.
  * @param {Comparator<T>} [compare=(o, n) => o === n] An optional function used to compare the old and new values. Defaults to a strict equality check.
  * @param {string} [key] An optional key to identify the observer. If not provided, a unique key will be generated.
- * @alias useDetector
  */
-export const useObserver = useDetector
+export const useValue = <T>(
+  getValue: GetNewValue<T>,
+  compare: Comparator<T> | undefined,
+  key: string | undefined,
+) => useDetector(getValue(), getValue, compare, key)

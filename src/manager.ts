@@ -5,6 +5,8 @@
 
 import type { Dispatch, MutableRefObject, SetStateAction } from "react"
 
+const f = requestAnimationFrame
+
 /**
  * Manages observers, allowing registration, update, and unregistration.
  *
@@ -31,7 +33,7 @@ class ObserverManager<T> {
         trigger((prev) => !prev)
       }
     }
-    this.animationId = requestAnimationFrame(this.update)
+    this.animationId = f(this.update)
   }
 
   /**
@@ -52,7 +54,7 @@ class ObserverManager<T> {
   ) {
     this.observers.set(key, { getNewValue, compare, trigger, prevRef })
     if (this.animationId === null) {
-      this.animationId = requestAnimationFrame(this.update)
+      this.animationId = f(this.update)
     }
   }
 

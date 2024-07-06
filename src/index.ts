@@ -1,3 +1,3 @@
 export { getObserverManager } from "./manager"
-export { useDetector, useObserver } from "./use-detector"
+export { useDetector, useValue } from "./use-detector"
 
