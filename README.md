@@ -13,7 +13,38 @@ bun add use-detector
 npx jsr add @tsx/use-detector
 ```
 
-### Example Usage
+### Simple Example
+
+```jsx
+import { useValue } from "use-detector"
+
+let count = 0
+
+function Count() {
+  useValue(() => count)
+
+  return <p>{count}</p>
+}
+
+function DoubleCount() {
+  useValue(() => count)
+
+  return <p>{count * 2}</p>
+}
+
+export default function App() {
+  return (
+    <div>
+      <Count />
+      <DoubleCount />
+      <button onClick={() => count++}>Increment</button>
+      <button onClick={() => count--}>Decrement</button>
+    </div>
+  )
+}
+```
+
+### Full Example Usage
 
 ```jsx
 import { useDetector } from "use-detector"
@@ -49,10 +80,18 @@ export default function App() {
 ### Full type definition
 
 ```ts
+function useValue<T>(
+  getValue: () => T,
+  compare?: Comparator<T>, // optional
+  key?: string // optional
+): void
+```
+
+```ts
 function useDetector<T>(
   oldValue: T,
   getNewValue: () => T,
-  compare: Comparator<T> = (o, n) => o === n, // optional
+  compare?: Comparator<T> = (o, n) => o === n, // optional
   key?: string, // optional
 ): void
 ```
