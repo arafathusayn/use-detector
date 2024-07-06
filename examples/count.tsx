@@ -1,4 +1,4 @@
-import { useDetector } from "../dist/index.js"
+import { useDetector } from "use-detector"
 
 let count = 0
 
