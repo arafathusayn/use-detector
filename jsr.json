@@ -1,0 +1,5 @@
+{
+  "name": "@tsx/use-detector",
+  "version": "1.0.1",
+  "exports": "./src/index.ts"
+}
