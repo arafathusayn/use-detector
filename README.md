@@ -2,7 +2,7 @@
 
 The `useValue` and the `useDetector` hooks allow multiple components to observe changes to a variable and trigger re-renders automatically whenever the variable changes. You can use it for "sharing state" between components without using React's Context API.
 
-### Install 
+### Install
 
 ```bash
 # npm:
@@ -49,20 +49,30 @@ export default function App() {
 ```jsx
 import { useDetector } from "use-detector"
 
+// shared state example
 let count = 0
 
-function Count() {
-  useDetector(count, () => count)
-
-  return <p>{count}</p>
-}
-
 function DoubleCount() {
+  // for derived state
   const double = () => count * 2
 
   useDetector(double(), double)
 
   return <p>{double()}</p>
+}
+
+// optional compare function, useful for reference types
+function compare<T>(prev: T, next: T) {
+  return prev === next
+}
+
+// optional key
+const key = "count"
+
+function Count() {
+  useDetector(count, () => count, compare, key)
+
+  return <p>{count}</p>
 }
 
 export default function App() {
@@ -83,7 +93,7 @@ export default function App() {
 function useValue<T>(
   getValue: () => T,
   compare?: Comparator<T>, // optional
-  key?: string // optional
+  key?: string, // optional
 ): void
 ```
 
