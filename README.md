@@ -87,6 +87,54 @@ export default function App() {
 }
 ```
 
+### Example: state in an object
+
+```ts
+// file: store.ts
+
+export const state = {
+  count: 0,
+  textInput: "",
+};
+```
+
+Then you may use the state object in your components like this:
+```tsx
+import { useValue } from "use-detector";
+
+import { state } from "./store";
+
+function Count() {
+  useValue(() => state.count);
+
+  return <p>{state.count}</p>;
+}
+
+function TextInput() {
+  useValue(() => state.textInput);
+
+  return (
+    <input
+      value={state.textInput}
+      onChange={(e) => {
+        state.textInput = e.target.value;
+      }}
+    />
+  );
+}
+
+export default function App() {
+  return (
+    <div>
+      <Count />
+      <TextInput />
+      <button onClick={() => state.count++}>+</button>
+      <button onClick={() => state.count--}>-</button>
+    </div>
+  );
+}
+```
+
 ### Full type definition
 
 ```ts
