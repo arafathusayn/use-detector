@@ -46,7 +46,7 @@ export default function App() {
 
 ### Full Example Usage
 
-```jsx
+```tsx
 import { useDetector } from "use-detector"
 
 // shared state example
