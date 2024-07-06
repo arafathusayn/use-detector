@@ -47,6 +47,6 @@ export function useDetector<T>(
  */
 export const useValue = <T>(
   getValue: GetNewValue<T>,
-  compare: Comparator<T> | undefined,
-  key: string | undefined,
+  compare?: Comparator<T> | undefined,
+  key?: string | undefined,
 ) => useDetector(getValue(), getValue, compare, key)
