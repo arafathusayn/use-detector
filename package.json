@@ -17,10 +17,7 @@
     "build": "tsup ./src"
   },
   "devDependencies": {
-    "@types/bun": "latest",
-    "tsup": "^8.1.0"
-  },
-  "peerDependencies": {
+    "tsup": "^8.1.0",
     "typescript": "^5.5.3"
   },
   "dependencies": {
