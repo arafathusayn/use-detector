@@ -13,6 +13,8 @@ bun add use-detector
 npx jsr add @tsx/use-detector
 ```
 
+> `requestAnimationFrame` is used under the hood by default. You may use `setTimeout` instead with `configureWithTimeout(interval)`. You may find more about it in this documentation.
+
 ### Simple Example
 
 ```jsx
@@ -39,6 +41,33 @@ export default function App() {
       <DoubleCount />
       <button onClick={() => count++}>Increment</button>
       <button onClick={() => count--}>Decrement</button>
+    </div>
+  )
+}
+```
+
+### Example using `setTimeout`
+
+```jsx
+import { useValue, configureWithTimeout } from "use-detector"
+
+const interval = 50
+
+configureWithTimeout(interval)
+
+let count = 0
+
+function Count() {
+  useValue(() => count)
+
+  return <p>{count}</p>
+}
+
+export default function App() {
+  return (
+    <div>
+      <Count />
+      <button onClick={() => count++}>Increment</button>
     </div>
   )
 }
@@ -95,32 +124,33 @@ export default function App() {
 export const state = {
   count: 0,
   textInput: "",
-};
+}
 ```
 
 Then you may use the state object in your components like this:
-```tsx
-import { useValue } from "use-detector";
 
-import { state } from "./store";
+```tsx
+import { useValue } from "use-detector"
+
+import { state } from "./store"
 
 function Count() {
-  useValue(() => state.count);
+  useValue(() => state.count)
 
-  return <p>{state.count}</p>;
+  return <p>{state.count}</p>
 }
 
 function TextInput() {
-  useValue(() => state.textInput);
+  useValue(() => state.textInput)
 
   return (
     <input
       value={state.textInput}
       onChange={(e) => {
-        state.textInput = e.target.value;
+        state.textInput = e.target.value
       }}
     />
-  );
+  )
 }
 
 export default function App() {
@@ -131,7 +161,7 @@ export default function App() {
       <button onClick={() => state.count++}>+</button>
       <button onClick={() => state.count--}>-</button>
     </div>
-  );
+  )
 }
 ```
 
@@ -152,6 +182,11 @@ function useDetector<T>(
   compare?: Comparator<T> = (o, n) => o === n, // optional
   key?: string, // optional
 ): void
+```
+
+```ts
+// To use setTimeout instead of requestAnimationFrame
+function configureWithTimeout(interval?: number): void
 ```
 
 ### License
