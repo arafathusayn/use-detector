@@ -1,3 +1,5 @@
-export { getObserverManager } from "./manager"
-export { useDetector, useValue } from "./use-detector"
+export {
+  configureLoop, configureWithTimeout, getObserverManager
+} from "./manager"
 
+export { useDetector, useValue } from "./use-detector"

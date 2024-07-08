@@ -5,8 +5,36 @@
 
 import type { Dispatch, MutableRefObject, SetStateAction } from "react"
 
-const f = requestAnimationFrame
-const c = cancelAnimationFrame
+type LoopFunction<T> = (callback: () => void) => T
+type CancelLoopFunction<T> = (id: T) => void
+
+let f = requestAnimationFrame as LoopFunction<unknown>
+let c = cancelAnimationFrame as CancelLoopFunction<unknown>
+
+/**
+ * Configures the loop functions used by the ObserverManager.
+ *
+ * @param {loop} loopFunction The function to start the loop.
+ * @param {cancelLoop} cancelLoop The function to cancel the loop.
+ */
+export function configureLoop<T>(
+  loopFunction: LoopFunction<T>,
+  cancelLoop: CancelLoopFunction<T>,
+) {
+  f = loopFunction as LoopFunction<unknown>
+  c = cancelLoop as CancelLoopFunction<unknown>
+}
+
+/**
+ * Uses setTimeout instead of requestAnimationFrame and
+ * clearTimeout instead of cancelAnimationFrame.
+ *
+ * @param {number} [interval=1] The interval in milliseconds.
+ * @returns {void}
+ */
+export function configureWithTimeout(interval: number = 1): void {
+  configureLoop((callback) => setTimeout(callback, interval), clearTimeout)
+}
 
 /**
  * Manages observers, allowing registration, update, and unregistration.
@@ -15,7 +43,7 @@ const c = cancelAnimationFrame
  */
 class ObserverManager<T> {
   private observers = new Map<string, ObserverEntry<T>>()
-  private animationId: number | null = null
+  private animationId: unknown | null = null
   private idCounter = 0
 
   /**
@@ -29,12 +57,17 @@ class ObserverManager<T> {
       prevRef,
     } of this.observers.values()) {
       const newValue = getNewValue()
+
       if (!compare(prevRef.current, newValue)) {
         prevRef.current = newValue
         trigger((prev) => !prev)
       }
     }
-    if (this.animationId !== null) c(this.animationId)
+
+    if (this.animationId !== null && this.animationId !== undefined) {
+      c(this.animationId)
+    }
+
     this.animationId = f(this.update)
   }
 
@@ -55,6 +88,7 @@ class ObserverManager<T> {
     prevRef: MutableRefObject<T>,
   ) {
     this.observers.set(key, { getNewValue, compare, trigger, prevRef })
+
     if (this.animationId === null) {
       this.animationId = f(this.update)
     }
@@ -67,6 +101,7 @@ class ObserverManager<T> {
    */
   unregister(key: string) {
     this.observers.delete(key)
+
     if (this.observers.size === 0 && this.animationId !== null) {
       c(this.animationId)
       this.animationId = null
