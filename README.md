@@ -29,9 +29,9 @@ function Count() {
 }
 
 function DoubleCount() {
-  useValue(() => count)
+  const doubleCount = useValue(() => count * 2)
 
-  return <p>{count * 2}</p>
+  return <p>{doubleCount}</p>
 }
 
 export default function App() {
@@ -172,16 +172,16 @@ function useValue<T>(
   getValue: () => T,
   compare?: Comparator<T>, // optional
   key?: string, // optional
-): void
+): T
 ```
 
 ```ts
 function useDetector<T>(
   oldValue: T,
   getNewValue: () => T,
-  compare?: Comparator<T> = (o, n) => o === n, // optional
+  compare?: Comparator<T> = (prev, next) => prev === next, // optional
   key?: string, // optional
-): void
+): T
 ```
 
 ```ts

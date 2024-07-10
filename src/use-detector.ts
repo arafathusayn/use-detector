@@ -25,7 +25,7 @@ export function useDetector<T>(
   getNewValue: GetNewValue<T>,
   compare: Comparator<T> = (o, n) => o === n,
   key?: string,
-): void {
+): T {
   const [, trigger] = useState(false)
   const prevRef = useRef(oldValue)
 
@@ -35,6 +35,8 @@ export function useDetector<T>(
     manager.reg(observerKey, getNewValue, compare, trigger, prevRef)
     return () => manager.unreg(observerKey)
   }, [key, getNewValue, compare])
+
+  return getNewValue()
 }
 
 /**
@@ -49,4 +51,4 @@ export const useValue = <T>(
   getValue: GetNewValue<T>,
   compare?: Comparator<T> | undefined,
   key?: string | undefined,
-): void => useDetector(getValue(), getValue, compare, key)
+): T => useDetector(getValue(), getValue, compare, key)
