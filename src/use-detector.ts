@@ -31,9 +31,9 @@ export function useDetector<T>(
 
   useEffect(() => {
     const manager = getObserverManager<T>()
-    const observerKey = key ?? manager.generateKey()
-    manager.register(observerKey, getNewValue, compare, trigger, prevRef)
-    return () => manager.unregister(observerKey)
+    const observerKey = key ?? manager.key()
+    manager.reg(observerKey, getNewValue, compare, trigger, prevRef)
+    return () => manager.unreg(observerKey)
   }, [key, getNewValue, compare])
 }
 

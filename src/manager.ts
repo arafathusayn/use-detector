@@ -42,20 +42,18 @@ export function configureWithTimeout(interval: number = 1): void {
  * @template T The type of the value being observed.
  */
 class ObserverManager<T> {
-  private observers = new Map<string, ObserverEntry<T>>()
-  private animationId: unknown | null = null
-  private idCounter = 0
+  // Observers
+  private os = new Map<string, ObserverEntry<T>>()
+  // Animation ID
+  private id: unknown | null = null
+  // Unique key index
+  private i = 0
 
   /**
    * Updates all registered observers, triggering re-renders as necessary.
    */
   private update = () => {
-    for (const {
-      getNewValue,
-      compare,
-      trigger,
-      prevRef,
-    } of this.observers.values()) {
+    for (const { getNewValue, compare, trigger, prevRef } of this.os.values()) {
       const newValue = getNewValue()
 
       if (!compare(prevRef.current, newValue)) {
@@ -64,11 +62,11 @@ class ObserverManager<T> {
       }
     }
 
-    if (this.animationId !== null && this.animationId !== undefined) {
-      c(this.animationId)
+    if (this.id !== null && this.id !== undefined) {
+      c(this.id)
     }
 
-    this.animationId = f(this.update)
+    this.id = f(this.update)
   }
 
   /**
@@ -80,17 +78,17 @@ class ObserverManager<T> {
    * @param {Trigger} trigger Function to trigger a re-render.
    * @param {MutableRefObject<T>} prevRef Reference to the previous value.
    */
-  register(
+  reg(
     key: string,
     getNewValue: GetNewValue<T>,
     compare: Comparator<T>,
     trigger: Trigger,
     prevRef: MutableRefObject<T>,
   ) {
-    this.observers.set(key, { getNewValue, compare, trigger, prevRef })
+    this.os.set(key, { getNewValue, compare, trigger, prevRef })
 
-    if (this.animationId === null) {
-      this.animationId = f(this.update)
+    if (this.id === null) {
+      this.id = f(this.update)
     }
   }
 
@@ -99,12 +97,12 @@ class ObserverManager<T> {
    *
    * @param {string} key The unique key identifying the observer to be unregistered.
    */
-  unregister(key: string) {
-    this.observers.delete(key)
+  unreg(key: string) {
+    this.os.delete(key)
 
-    if (this.observers.size === 0 && this.animationId !== null) {
-      c(this.animationId)
-      this.animationId = null
+    if (this.os.size === 0 && this.id !== null) {
+      c(this.id)
+      this.id = null
     }
   }
 
@@ -113,8 +111,8 @@ class ObserverManager<T> {
    *
    * @returns {string} A unique key.
    */
-  generateKey(): string {
-    return `observer_${this.idCounter++}`
+  key(): string {
+    return "" + this.i++
   }
 }
 
