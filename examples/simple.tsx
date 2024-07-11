@@ -9,9 +9,9 @@ function Count() {
 }
 
 function DoubleCount() {
-  useValue(() => count)
+  const double = useValue(() => count * 2)
 
-  return <p>{count * 2}</p>
+  return <p>{double}</p>
 }
 
 export default function App() {

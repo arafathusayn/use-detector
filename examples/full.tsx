@@ -1,5 +1,6 @@
-import { useDetector } from "use-detector"
+import { useValue, useDetector } from "use-detector"
 
+// state to detect/observe
 let count = 0
 
 function DoubleCount() {
@@ -9,6 +10,24 @@ function DoubleCount() {
   useDetector(double(), double)
 
   return <p>{double()}</p>
+}
+
+// state in an object
+const state = {
+  textInput: "",
+}
+
+function TextInput() {
+  useValue(() => state.textInput)
+
+  return (
+    <input
+      value={state.textInput}
+      onChange={(e) => {
+        state.textInput = e.target.value
+      }}
+    />
+  )
 }
 
 // optional compare function, useful for reference types
@@ -28,10 +47,16 @@ function Count() {
 export default function App() {
   return (
     <div>
-      <Count />
-      <DoubleCount />
-      <button onClick={() => count++}>Increment</button>
-      <button onClick={() => count--}>Decrement</button>
+      <div>
+        <Count />
+        <DoubleCount />
+        <button onClick={() => count++}>Increment</button>
+        <button onClick={() => count--}>Decrement</button>
+      </div>
+
+      <div>
+        <TextInput />
+      </div>
     </div>
   )
 }
